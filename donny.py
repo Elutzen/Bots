@@ -20,12 +20,12 @@ old_id =file.read()
 file.close()
 
 last_tweet = tweets[0].id
-print(old_id)
-print(last_tweet)
+#print(old_id)
+#print(last_tweet)
 test1 = int(old_id)
 test2 = int(last_tweet)
 if(test1 != test2):
-	print("new tweet")
+	#print("new tweet")
 	file = open(last_don,"w")
 	file.write(str(last_tweet))
 	file.close()
@@ -51,8 +51,8 @@ if(test1 != test2):
 		count += 1
 
 	final = ''.join(textList)
-	print(final)
-	#api.update_status(final)
+	#print(final)
+	api.update_status(final)
 
 
 
