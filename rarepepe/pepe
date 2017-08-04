@@ -1,0 +1,74 @@
+import praw
+import tweepy
+import urllib
+
+Last = "last.txt"
+
+def twitter_api():
+	ckey = 'BCfjMBMdfnkLs69ggXH5Wudq3'
+	csecret = 'b1aOM2S2wfUIqdYjqNQPlSttpNbRIkEuZ2ZARYH2W6KDYtQt4o'
+	atoken = '893152499191959552-aULuMyBXTKUsv8v2qdnyqumENHsnZit'
+	asecret = 'LBjbE7jm6mefv0ztXQtKqgcGzqTsf4NhPQ6Fpt3eQsqgZ'
+	auth = tweepy.OAuthHandler(ckey, csecret)
+	auth.set_access_token(atoken, asecret)
+	api = tweepy.API(auth)
+	return api
+
+def reddit_api():
+	r = praw.Reddit(
+	user_agent = 'myfirstbot',
+	client_id = 'BSNpqgw2vGOZ0Q',
+	client_secret='OCKYsjEM0I6Wb3cMnyUiYhY6xyQ')
+	return r
+
+def get_pepes():
+	newpepes = sub.top('day', limit = 15)
+	return newpepes
+
+def post_pepe():
+	prev = []
+	posted = 0
+	with open(Last) as f:
+		for line in f:
+			prev.append(line.rstrip('\n'))
+	f.close()
+	print(prev)
+	for pepe in pepes:
+		url = pepe.url
+		title = pepe.title
+		if url not in prev:
+			if posted == 0:
+				prev.insert(0, url)
+				if (len(prev) > 8):
+					del prev[-1]
+				f = open(Last, 'w')
+				for text in prev:
+					f.write("%s\n" % text)
+				f.close()
+				urllib.request.urlretrieve(url, "post.jpg")
+				api.update_with_media("post.jpg", status = title) #tweet new pepe
+				posted = 1
+	return 0
+
+def update_prof_pic():
+	top = sub.top('month', limit = 1)
+	for post in top:
+		#topTitle = post.title
+		topUrl = post.url
+		#print(topTitle)
+		#print(topUrl)
+		urllib.request.urlretrieve(topUrl, "top.jpg")
+		api.update_profile_image("top.jpg")
+	return 0
+
+api = twitter_api()
+r = reddit_api()
+sub = r.subreddit('pepe')
+pepes = get_pepes()
+post_pepe()
+update_prof_pic()
+
+#print(url)
+#print(type(url))
+#print(title)
+#print(type(title))
